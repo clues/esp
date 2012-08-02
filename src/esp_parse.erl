@@ -45,7 +45,32 @@ loop_parse(<<H1:8,Bin/binary>>,{static,L},Q) ->
 	loop_parse(Bin,{static,[H1|L]},Q).
 
 
+write_header(FileName) ->
+	BaseName = filename:basename(FileName, ".esp"),
+	Mod = BaseName ++ "_esp",
+	Header = "-module(" ++ Mod ++ ")." ++ ?ESP_DOUBLE_CRLF_L
+			 ++ "-export(["main/0])." ++ ?ESP_DOUBLE_CRLF_L
+			 ++ "main() ->" ++ ?ESP_DOUBLE_CRLF_L,
+   
+	
+write_body(Q,IsOdd,Context) when IsOdd->
+	case queue:out(Q) of
+		{empty,_} ->
+			ok;
+		{{value,V},Q1} ->
+			L = lists:concat([Context,"\t","lists:concat([",V,?ESP_DOUBLE_CRLF_L,"]),"]),
+			write_body(Q1,!IsOdd,L)
+	end;	
 
+write_body(Q,IsOdd,C) when IsOdd->
+	case queue:out(Q) of
+		{empty,_} ->
+			ok;
+		{{value,V},Q1} ->
+			L = lists:concat(["\t","lists:concat([",V,?ESP_DOUBLE_CRLF_L,"]),"]),
+			write_body(Q1,!IsOdd,L)
+	end;	
+	
 write_temp(Q,FileName) ->
 	case queue:out(Q) of
 		{empty,_} ->
