@@ -1,0 +1,30 @@
+
+<html>
+<head>esp sample</head>
+<body>
+<@Button2=button2,
+  {Y,M,D}=date(),
+  Me='$100'
+  %%this is comment
+@>
+esp page template create by: <@= Me@>--<@=Y@>/<@= M@>/<@=D@>
+<button name="bt_static">button1</button>
+<button name="dy_static"><@=Button2@></button>
+
+<table border="1">
+  <tr>
+    <th>Month</th>
+    <th>Savings</th>
+  </tr>
+  <@
+  FILL = fun(X) ->
+  	@><TR>
+  		<TD>month_<@=X@></TD>
+  		<TD><@=X*100@></TD>
+  	  </TR>
+	<@end,
+	lists:foreach(FILL,lists:seq(1,12))
+	@>
+</table>
+</body>
+</html>
