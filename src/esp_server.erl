@@ -48,6 +48,11 @@ init([]) ->
 %%          {stop, Reason, Reply, State}   | (terminate/2 is called)
 %%          {stop, Reason, State}            (terminate/2 is called)
 %% --------------------------------------------------------------------
+
+handle_call(Request, From, State) ->
+    Reply = ok,
+    {reply, Reply, State};
+
 handle_call(Request, From, State) ->
     Reply = ok,
     {reply, Reply, State}.

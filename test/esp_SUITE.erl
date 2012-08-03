@@ -6,9 +6,12 @@
 -compile(export_all).
 
 all() ->
-	[mytest].
+	[fliter_test].
 
 mytest(_) ->
 	ok.
 
 
+fliter_test(_) ->
+	{ok,["my.esp"]} = esp:fliter(["my.esp","hello.erl","hitle.tt"],[]),
+	ok.

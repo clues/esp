@@ -9,7 +9,7 @@
 @>
 esp page template create by: <@= Me@>--<@=Y@>/<@= M@>/<@=D@>
 <button name="bt_static">button1</button>
-<button name="dy_static"><@=Button2@></button>
+<button name="dy_static" onclick="javascript:alert(this.name);"><@=Button2@></button>
 
 <table border="1">
   <tr>
