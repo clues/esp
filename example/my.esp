@@ -2,14 +2,16 @@
 <html>
 <head>esp sample</head>
 <body>
-<@Button2=button2,
+<@Button2=click_me,
   {Y,M,D}=date(),
-  Me='$100'
   %%this is comment
+  Me='jias.chao'
 @>
 esp page template create by: <@= Me@>--<@=Y@>/<@= M@>/<@=D@>
-<button name="bt_static">button1</button>
-<button name="dy_static" onclick="javascript:alert(this.name);"><@=Button2@></button>
+<p>
+<button name="static_bt" onclick="javascript:alert(this.name);">static</button>
+<br>
+<button name="dynamic_bt" onclick="javascript:alert('hello world');"><@=Button2@></button>
 
 <table border="1">
   <tr>
