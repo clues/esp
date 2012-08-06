@@ -7,6 +7,14 @@
 -compile(export_all).
 -include("esp.hrl").
 
+
+parse(Filename) ->
+	parse(Filename,"./").
+parse(Filename,DestDir) ->
+	{ok,Bin} = file:read_file(Filename),
+	{ok,Q} = loop_parse(Bin),
+	write_temp(Q,Filename,DestDir).
+
 loop_parse(Bin) ->
 	Q = queue:new(),
 	loop_parse(Bin,{static,[]},Q).
@@ -22,7 +30,6 @@ loop_parse(<<H1:8,H2:8,Bin/binary>>,{dynamic,L},Q) when H1 == $@ ,H2 == $>->
 	Q2 = queue:in(lists:reverse(L),Q),
 	loop_parse(Bin,{static,[]},Q2);
 
-%% ;author:<lino.chao@gmail.com>
 loop_parse(<<H1:8,H2:8,Bin/binary>>,{_Flag,L},Q) when H1 == $< ,H2 =/= $@->
 	loop_parse(Bin,{_Flag,[H2,H1|L]},Q);
 loop_parse(<<H1:8,H2:8,Bin/binary>>,{_Flag,L},Q) when H1 == $@ ,H2 =/= $>->
@@ -36,7 +43,7 @@ loop_parse(<<H1:8,Bin/binary>>,{static,L},Q) when H1 == $"->
 loop_parse(<<H1:8,Bin/binary>>,{static,L},Q) ->
 	loop_parse(Bin,{static,[H1|L]},Q).
 
-is_pre_keyword(V) ->
+is_pre_keyword(V) ->   %% keyword 'end'
 	case re:run(V,"[\s|\r\n]*end[\s|,|\.]",[]) of
 		{match,[{0,_}]} ->
 			true;
@@ -44,7 +51,7 @@ is_pre_keyword(V) ->
 			false
 	end.
 
-is_aft_keyword(V) ->
+is_aft_keyword(V) ->  %% keyword '->'
 	Len = length(V),
 	case re:run(V,"[^s]*->[\s|\r\n]*",[]) of
 		{match,[{0,_}]} ->
@@ -92,10 +99,10 @@ write_body({{value,V},Q},IsOdd,Context) ->
 	L = lists:concat([NewComtent,?ESP_DOUBLE_CRLF_L,V,Nif]),
 	write_body(queue:out(Q),not IsOdd,L).		
 	
-write_temp(Q,FileName) ->
+write_temp(Q,FileName,DestDir) ->
 	{ok,Mod,L} = write_header(FileName),
 	{ok,C} = write_body(queue:out(Q),true,[]),
-	ErlFile = filename:dirname(FileName) ++ "/" ++ Mod ++ ".erl",
+	ErlFile = filename:join(DestDir, Mod++".erl"),
 	file:write_file(ErlFile, list_to_binary(L++lists:sublist(C, 2, 99999)), [binary]),
 	{ok,ErlFile}.
 
