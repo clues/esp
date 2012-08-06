@@ -3,15 +3,13 @@
 %% Description: TODO: Add description to esp_SUITE
 -module(esp_SUITE).
 
+-include_lib("kernel/include/file.hrl").
 -compile(export_all).
 
 all() ->
-	[fliter_test].
+	[mytest].
 
 mytest(_) ->
 	ok.
 
 
-fliter_test(_) ->
-	{ok,["my.esp"]} = esp:fliter(["my.esp","hello.erl","hitle.tt"],[]),
-	ok.

@@ -39,7 +39,7 @@ test-compile:
 
 test_suite:clean \
 		compile
-		@$(REBAR) ct suite=esp_compile
+		@$(REBAR) ct suite=esp
 	
 app:
 	@$(REBAR) create-app appid=esp
