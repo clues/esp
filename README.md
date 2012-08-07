@@ -26,6 +26,8 @@ sample:
 
 style like jsp
 1 code
+
+<div>
 	<@Erlang code@>
 	<@ I = 3,
 	   3 = I,
@@ -33,28 +35,32 @@ style like jsp
 	
 	<@= I @>
 	<@=(I*3-5)@>
-
+</div>
 1.1 support comment 
+	
+<div>
 	<@
 		%%this is comment
 		Pwd = file:get_cwd()
 	@>
+</div>
 
 2 not support define unanonymous function,
   you can use anonymous replace
- 
-<@
-	Fun1 = fun(X,AccIn) ->
-						case filename:extension(X) of
-							Ext ->
-								[X|AccIn];
-							_ ->
-								AccIn
-						end
-				end	
-
-	{ok,List} =file:list_dir(Dir),
-	lists:foldl(Fun1, [], List)
-@>  
   
+<div> 
+	<@
+		Fun1 = fun(X,AccIn) ->
+							case filename:extension(X) of
+								Ext ->
+									[X|AccIn];
+								_ ->
+									AccIn
+							end
+					end	
+	
+		{ok,List} =file:list_dir(Dir),
+		lists:foldl(Fun1, [], List)
+	@>  
+</div>  
  
