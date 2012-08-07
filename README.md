@@ -7,7 +7,6 @@ erlang server page
 style like jsp(./example/my.esp)
 1 code
 
-	<@Erlang code@>
 	<@ I = 3,
 	   3 = I,
 	   erlang:now()@>
