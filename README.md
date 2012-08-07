@@ -9,7 +9,7 @@ sample:
   <tr>
     <th>Month</th>
     <th>Savings</th>
-  </tr>
+  </tr>"
   <@
   FILL = fun(X) ->
   	@><TR>
@@ -18,8 +18,9 @@ sample:
   	  </TR>
 	<@end,
 	lists:foreach(FILL,lists:seq(1,12))
-	@>
+	@>"
 </table>
+
 
 
 
@@ -27,7 +28,6 @@ sample:
 style like jsp
 1 code
 
-<div>
 	<@Erlang code@>
 	<@ I = 3,
 	   3 = I,
@@ -35,20 +35,19 @@ style like jsp
 	
 	<@= I @>
 	<@=(I*3-5)@>
-</div>
-1.1 support comment 
-	
-<div>
+
+
+1.1 support comment 	
+
 	<@
 		%%this is comment
 		Pwd = file:get_cwd()
 	@>
-</div>
+
 
 2 not support define unanonymous function,
   you can use anonymous replace
-  
-<div> 
+ 
 	<@
 		Fun1 = fun(X,AccIn) ->
 							case filename:extension(X) of
@@ -62,5 +61,5 @@ style like jsp
 		{ok,List} =file:list_dir(Dir),
 		lists:foldl(Fun1, [], List)
 	@>  
-</div>  
+  
  
