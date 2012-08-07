@@ -54,7 +54,7 @@ is_pre_keyword(V) ->   %% keyword 'end'
 is_aft_keyword(V) ->  %% keyword '->'
 	Len = length(V),
 	case re:run(V,"[^s]*->[\s|\r\n]*",[]) of
-		{match,[{0,_}]} ->
+		{match,[{0,Len}]} ->
 			true;
 		_ ->
 			false

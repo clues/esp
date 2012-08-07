@@ -7,22 +7,25 @@
 -compile(export_all).
 -endif.
 
--export([compile/0,
-		 compile/1,
-		 compile/2,
+-export([compile_esp_dir/0,
+		 compile_esp_dir/1,
+		 compile_esp_dir/2,
 		 
-		 compile_src_list/1,
-		 compile_src_list/2
+		 compile_esp/1,
+		 compile_esp/2,
+		 
+		 compile_src/1,
+		 compile_src/2
 		 ]).
 
 %% compile *.esp to *.beam files from SrcDir to DestDir
 %% if not fill SrcDir and DestDir will be current path
 %% note all temp *.erl will be delete after compile
-compile() ->
-	compile("./","./").
-compile(DestDir) ->
-	compile("./",DestDir).
-compile(SrcDir,DestDir) ->
+compile_esp_dir() ->
+	compile_esp_dir("./","./").
+compile_esp_dir(DestDir) ->
+	compile_esp_dir("./",DestDir).
+compile_esp_dir(SrcDir,DestDir) ->
 	{ok,FileList} = file:list_dir(SrcDir),
 	Fun = fun(X,AccIn) ->
 				  case filename:extension(X) of
@@ -33,27 +36,22 @@ compile(SrcDir,DestDir) ->
 				  end
 		  end,
 	EspFiles = lists:foldl(Fun, [], FileList),
-	ErlFiles = proplists:get_all_values(ok,lists:foldl(fun(X,AccIn) ->
-						[esp_parse:parse(X)|AccIn] end, [], EspFiles)),
-	L = compile_src_list(ErlFiles,DestDir),
-	lists:foreach(fun(X) ->
-						  file:delete(X) end, ErlFiles),
-	L.
+	lists:foldl(fun(X,AccIn) ->
+						[compile_esp(X,DestDir)|AccIn] end, [], EspFiles).
 
+%% compile one esp file to DestDir
+compile_esp(EspFile) ->
+	compile_esp(EspFile,"./").
+compile_esp(EspFile,DestDir) ->
+	{ok,ErlFile} = esp_parse:parse(EspFile),
+	R = compile_src(ErlFile,DestDir),
+	error_logger:info_msg("~p -- compile esp file:~p to outdir:~p", [?MODULE,EspFile,DestDir]),
+	file:delete(ErlFile),
+	R.
 
-
-%% compile erl source files out to DestDir
+%% compile erl source file out to DestDir
 %% DestDir default is current path
-compile_src_list(List) ->
-	compile_src_list(List,"./").
-compile_src_list(List,DestDir) ->
-	Fun = fun(X,AccIn) ->
-				  case  c:c(X, [{outdir,filename:absname(DestDir)}]) of
-					  {ok,Mod} ->
-						  [{ok,Mod}|AccIn];
-					  _ ->
-						  AccIn
-				  end
-		  end,
-	lists:foldl(Fun, [], List).
-
+compile_src(ErlFile) ->
+	compile_src(ErlFile,"./").
+compile_src(ErlFile,DestDir) ->
+	c:c(ErlFile, [{outdir,filename:absname(DestDir)}]).

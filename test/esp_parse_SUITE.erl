@@ -6,8 +6,7 @@
 -compile(export_all).
 
 all() ->[
-%% 		 parse_test,
-		 integate_test,
+		 parse_test,
 		 is_pre_keyword_test,
 		 is_aft_keyword_test
 		 ].
@@ -19,13 +18,9 @@ txt() ->
 
 parse_test(_) ->
 	{ok,Q} = esp_parse:loop_parse(txt()),
-%% 	esp_parse:write_temp(Q,"/tmp/mmm.esp"),
 	{ok,";author:<lino.chao@gmail.com>=Dserial: D=12345abc"} = loop(Q,[]),
 	ok.
 
-integate_test(_) ->
-	SrcDir = "/home/wave/git/esp/example",
-	esp:request(SrcDir,".").
 
 
 is_pre_keyword_test(_) ->
