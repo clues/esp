@@ -24,7 +24,9 @@
 
 
 start_link() ->
-	start_link({"./","./"}).
+	{ok,SrcPath} = application:get_env(esp, src_path),
+	{ok,DestPath} = application:get_env(esp, dest_path),
+	start_link({SrcPath,DestPath}).
 start_link({SrcPath,DestPath}) ->
 	gen_server:start_link({local,?MODULE},?MODULE, [{SrcPath,DestPath}], []).
 

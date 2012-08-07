@@ -17,6 +17,7 @@ all() ->
 
 
 test_unesp_file(_) ->
+	application:start(esp),
 	esp_server:start_link(),
 	{error,unesp} = esp_server:request("/service/page.html"),
 	ok.
@@ -24,12 +25,14 @@ test_unesp_file(_) ->
 
 
 test_noexist_file(_) ->
+	application:start(esp),
 	esp_server:start_link(),
 	{error,noexist} = esp_server:request("/service/page.esp"),
 	ok.
 
 
 test_normal(_) ->
+	application:start(esp),
 	Temp = "<html><body>pwd:<@=file:get_cwd()@></body></html>",
 	TestFile = "example.esp",
 	file:delete(TestFile),

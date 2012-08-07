@@ -8,5 +8,8 @@
                   stdlib
                  ]},
   {mod, { esp_app, []}},
-  {env, []}
+  {env, [
+  	{src_path,"./"},
+  	{dest_path,"./"}
+  ]}
  ]}.

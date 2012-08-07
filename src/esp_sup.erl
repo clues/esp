@@ -24,5 +24,9 @@ start_link() ->
 %% ===================================================================
 
 init([]) ->
-    {ok, { {one_for_one, 5, 10}, []} }.
+	error_logger:info_msg("esp_supervisor start ~p~n",[node()]),
+	EspSup = {esp_server, 
+			  {esp_server, start_link,[]}, 
+			  permanent, infinity,supervisor,[esp_server]},	
+    {ok, { {one_for_one, 5, 10}, [EspSup]} }.
 
