@@ -3,29 +3,8 @@ esp
 
 erlang server page
 
-sample:
 
-<table border="1">
-  <tr>
-    <th>Month</th>
-    <th>Savings</th>
-  </tr>"
-  <@
-  FILL = fun(X) ->
-  	@><TR>
-  		<TD>month_<@=X@></TD>
-  		<TD><@=X*100@></TD>
-  	  </TR>
-	<@end,
-	lists:foreach(FILL,lists:seq(1,12))
-	@>"
-</table>
-
-
-
-
-
-style like jsp
+style like jsp(./example/my.esp)
 1 code
 
 	<@Erlang code@>
